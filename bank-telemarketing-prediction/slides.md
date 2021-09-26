@@ -226,13 +226,18 @@ layout: two-cols
 ```python {all|1-4|1-9|all}
 def plot_graphs(col, df):
     # Set Figsize
-    len_values = len(df[col].value_counts()) if len(df[col].value_counts()) > 5 else 5
-    fig, ax = plt.subplots(2, sharex=True, figsize=(len_values, 15))
+    if len(df[col].value_counts()) > 5:
+        fig, ax = plt.subplots(2, sharex=True, figsize=(10, 10))
+    else:
+        fig, ax = plt.subplots(1, 2, figsize=(7, 5))
+        fig.tight_layout()
 
     # Plot Histogram
-    sns.histplot(data=df, x=col, ax=ax[0])
+    sns.countplot(data=df, x=col, ax=ax[0], color='C0')
+    for i, p in enumerate(ax[0].patches):
+        ax[0].annotate(f'{p.get_height()}', (p.get_x()+0.1, p.get_height()+5))
     ax[0].set_title(f"{col.title()} Histogram")
-    ax[1].set_title(f"y distribution on {col.title()}")
+    # ax[0].set_xticklabels(ax[0].get_xticklabels(), rotation=40, ha="right")
 
     # Plot y distribution on feature
     Y = df[col]
@@ -243,16 +248,19 @@ def plot_graphs(col, df):
         ax[1].annotate(f'{percent:.2f}%', (p.get_x()+0.1, p.get_height()+5))
 
     ax[1].set_yticklabels(map('{:.1f}%'.format, 100*ax[1].yaxis.get_majorticklocs()/total))
-    ax[1].set_xticklabels(ax[1].get_xticklabels(), rotation=40, ha="right")
+    ax[1].set_xticklabels(ax[1].get_xticklabels(), rotation=10, ha="right")
+    ax[1].set_title(f"y distribution on {col.title()}")
     plt.show()
+    # fig.savefig(f'bank-telemarketing-prediction/images/hist_{col}.png')
+    # plt.close(fig)
 ```
 
 ::right::
 
-#### Data Type: Categorical
+#### Feature Type: Categorical
 
 ###### 1. Job
-<img style="margin-left:40px;" border="rounded" src="/images/hist_job.png" width="350">
+<img border="rounded" src="/images/hist_job.png" width="600">
 <!-- <img style="margin-left:40px;" border="rounded" src="/images/y_vs_job.png" width="350"> -->
 
 <style>
@@ -271,73 +279,217 @@ def plot_graphs(col, df):
 layout: two-cols
 
 ---
-#### Data Type: Categorical
+#### Feature Type: Categorical
 
 ###### 2. Marital Status
-<img style="margin-left:40px;" border="rounded" src="/images/hist_marital.png" width="150">
+<img border="rounded" src="/images/hist_marital.png" width="400">
 
 
 ::right::
 #### ___
 ###### 3. Education
-<img style="margin-left:40px;" border="rounded" src="/images/hist_education.png" width="225">
+<img border="rounded" src="/images/hist_education.png" width="400">
 
 ---
 layout: two-cols
 
 ---
-#### Data Type: Categorical
+#### Feature Type: Categorical
 
 ###### 4. Default
-<img style="margin-left:40px;" border="rounded" src="/images/hist_default.png" width="150">
+<img style="margin-left:40px;" border="rounded" src="/images/hist_default.png" width="400">
 
 
 ::right::
 #### ___
 ###### 5. housing Loan
-<img style="margin-left:40px;" border="rounded" src="/images/hist_housing.png" width="150">
+<img style="margin-left:40px;" border="rounded" src="/images/hist_housing.png" width="400">
 
 ---
 layout: two-cols
 
 ---
-#### Data Type: Categorical
+#### Feature Type: Categorical
 
 ###### 6. Personal Loan
-<img style="margin-left:40px;" border="rounded" src="/images/hist_loan.png" width="150">
+<img style="margin-left:40px;" border="rounded" src="/images/hist_loan.png" width="400">
 
 
 ::right::
 #### ___
 ###### 7. Contact
-<img style="margin-left:40px;" border="rounded" src="/images/hist_contact.png" width="150">
+<img style="margin-left:40px;" border="rounded" src="/images/hist_contact.png" width="400">
 
 ---
 layout: two-cols
 
 ---
-#### Data Type: Categorical
+#### Feature Type: Categorical
 
 ###### 8. Month
-<img style="margin-left:40px;" border="rounded" src="/images/hist_month.png" width="300">
+<img style="margin-left:40px;" border="rounded" src="/images/hist_month.png" width="400">
 
 
 ::right::
 #### ___
 ###### 9. Day of Week
-<img style="margin-left:40px;" border="rounded" src="/images/hist_day_of_week.png" width="150">
+<img style="margin-left:40px;" border="rounded" src="/images/hist_day_of_week.png" width="400">
 
 ---
 layout: two-cols
 
 ---
-#### Data Type: Categorical
+#### Feature Type: Categorical
 
 ###### 10. P-outcome
-<img style="margin-left:40px;" border="rounded" src="/images/hist_poutcome.png" width="150">
+<img style="margin-left:40px;" border="rounded" src="/images/hist_poutcome.png" width="400">
 
 
 ::right::
+
+---
+layout: two-cols
+
+---
+<div
+  v-if="$slidev.nav.currentPage === 12"
+  v-motion
+  :initial="{ x: 80 }"
+  :enter="{ x: 0 }">
+  <h1>Analisis Deskriptif (2)</h1>
+</div>
+
+```python
+def plot_numeric_graphs(col, df):
+    fig, ax = plt.subplots(2, figsize=(7, 10))
+    sns.boxplot(x='y', y=col, data=df, ax=ax[0])
+    sns.histplot(df[col], kde=True)
+    plt.show()
+    # fig.savefig(f'bank-telemarketing-prediction/images/hist_{col.replace(".", "_")}.png')
+    # plt.close(fig)
+```
+
+::right::
+
+#### Feature Type: Numeric
+
+###### 1. Age
+<img border="rounded" src="/images/hist_age.png" width="325">
+
+<style>
+  h1 {
+    background-color: #2B90B6;
+    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+    background-size: 100%;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent; 
+    -moz-text-fill-color: transparent;
+  }
+</style>
+
+---
+layout: two-cols
+
+---
+#### Feature Type: Numeric
+
+###### 2. Duration
+<img border="rounded" src="/images/hist_duration.png" width="325">
+
+::right::
+
+#### ___
+
+###### 3. Campaign
+<img border="rounded" src="/images/hist_campaign.png" width="325">
+
+---
+layout: two-cols
+
+---
+#### Feature Type: Numeric
+
+###### 4. P-days
+<img border="rounded" src="/images/hist_pdays.png" width="325">
+
+::right::
+
+#### ___
+
+###### 5. Previous
+<img border="rounded" src="/images/hist_previous.png" width="325">
+
+---
+layout: two-cols
+
+---
+#### Feature Type: Numeric
+
+###### 6. emp.var.rate
+<img border="rounded" src="/images/hist_emp_var_rate.png" width="325">
+
+::right::
+
+#### ___
+
+###### 7. nr.employed
+<img border="rounded" src="/images/hist_nr_employed.png" width="325">
+
+
+---
+layout: two-cols
+
+---
+#### Feature Type: Numeric
+
+###### 8. cons.price.idx
+<img border="rounded" src="/images/hist_cons_price_idx.png" width="325">
+
+::right::
+
+#### ___
+
+###### 9. cons.conf.idx
+<img border="rounded" src="/images/hist_cons_price_idx.png" width="325">
+
+---
+layout: two-cols
+
+---
+#### Feature Type: Numeric
+
+###### 10. euribor3m
+<img border="rounded" src="/images/hist_euribor3m.png" width="325">
+
+::right::
+
+#### ___
+
+
+---
+
+<div
+  v-if="$slidev.nav.currentPage === 18"
+  v-motion
+  :initial="{ x: 80 }"
+  :enter="{ x: 0 }">
+  <h1>Heat Map Correlation</h1>
+</div>
+
+<img class="ml-44" border="rounded" src="/images/heatmap_corr.png" width="475">
+
+<style>
+  h1 {
+    background-color: #2B90B6;
+    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+    background-size: 100%;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent; 
+    -moz-text-fill-color: transparent;
+  }
+</style>
 
 ---
 layout: image-right
