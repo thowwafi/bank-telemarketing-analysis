@@ -193,6 +193,7 @@ layout: two-cols
 
 -   Subscribe to term deposit?
 -   y = (yes/no)
+- Terlihat data yang tidak seimbang pada grafik di sebelah
 
 ::right::
 
@@ -259,8 +260,9 @@ def plot_graphs(col, df):
 
 ###### 1. Job
 
-<img border="rounded" src="/images/hist_job.png" width="600">
-<!-- <img style="margin-left:40px;" border="rounded" src="/images/y_vs_job.png" width="350"> -->
+<small>Admin Job terlihat paling banyak subscribe dan tidak subscribe deposito</small>
+<img border="rounded" src="/images/hist_job.png" width="400">
+
 
 <style>
   h1 {
@@ -284,6 +286,8 @@ layout: two-cols
 ###### 2. Marital Status
 
 <img border="rounded" src="/images/hist_marital.png" width="400">
+<br>
+<small>Mayoritas customer sudah menikah</small>
 
 ::right::
 
@@ -360,6 +364,8 @@ layout: two-cols
 ###### 10. P-outcome
 
 <img style="margin-left:40px;" border="rounded" src="/images/hist_poutcome.png" width="400">
+<br>
+<small>Terdapat nilai success yang lebih besar pada variable ini, yaitu pada customer yang sukses pada campaign sebelumnya.</small>
 
 ::right::
 
@@ -383,7 +389,8 @@ def plot_numeric_graphs(col, df):
     sns.histplot(df[col], kde=True)
     plt.show()
 ```
-
+<br>
+<small>Mayoritas customer berada pada usia 30-40 tahun.</small>
 ::right::
 
 #### Feature Type: Numeric
@@ -412,8 +419,8 @@ layout: two-cols
 #### Feature Type: Numeric
 
 ###### 2. Duration
-
-<img border="rounded" src="/images/hist_duration.png" width="325">
+<small>Beda nilai median yang signifikan.</small>
+<img border="rounded" src="/images/hist_duration.png" width="300">
 
 ::right::
 
@@ -450,16 +457,16 @@ layout: two-cols
 #### Feature Type: Numeric
 
 ###### 6. emp.var.rate
-
-<img border="rounded" src="/images/hist_emp_var_rate.png" width="325">
+<small>Beda nilai median yang signifikan.</small>
+<img border="rounded" src="/images/hist_emp_var_rate.png" width="300">
 
 ::right::
 
 #### \_\_\_
 
 ###### 7. nr.employed
-
-<img border="rounded" src="/images/hist_nr_employed.png" width="325">
+<small>Beda nilai median yang signifikan.</small>
+<img border="rounded" src="/images/hist_nr_employed.png" width="300">
 
 ---
 layout: two-cols
@@ -469,16 +476,16 @@ layout: two-cols
 #### Feature Type: Numeric
 
 ###### 8. cons.price.idx
-
-<img border="rounded" src="/images/hist_cons_price_idx.png" width="325">
+<small>Beda nilai median yang signifikan.</small>
+<img border="rounded" src="/images/hist_cons_price_idx.png" width="300">
 
 ::right::
 
 #### \_\_\_
 
 ###### 9. cons.conf.idx
-
-<img border="rounded" src="/images/hist_cons_price_idx.png" width="325">
+<small>Beda nilai median yang signifikan.</small>
+<img border="rounded" src="/images/hist_cons_price_idx.png" width="300">
 
 ---
 layout: two-cols
@@ -488,12 +495,15 @@ layout: two-cols
 #### Feature Type: Numeric
 
 ###### 10. euribor3m
-
-<img border="rounded" src="/images/hist_euribor3m.png" width="325">
+<small>Beda nilai median yang signifikan.</small>
+<img border="rounded" src="/images/hist_euribor3m.png" width="300">
 
 ::right::
 
 #### \_\_\_
+
+---
+layout: two-cols
 
 ---
 
@@ -504,9 +514,11 @@ layout: two-cols
   :enter="{ x: 0 }">
   <h1>Heat Map Correlation</h1>
 </div>
-
-<img class="ml-44" border="rounded" src="/images/heatmap_corr.png" width="475">
-
+<img class="ml-4" border="rounded" src="/images/heatmap_corr.png" width="475">
+::right::
+<br>
+<br>
+<small>Terdapat nilai korelasi yang tinggi pada variable `euribor3m` dan `nr.employed`.</small>
 <style>
   h1 {
     background-color: #2B90B6;
@@ -628,8 +640,6 @@ layout: two-cols
   <h1>Tuning Parameter</h1>
 </div>
 
-##### With and Without Duration feature
-
 ```python 
 alpha = [10 ** x for x in range(-5, 4)]
 auc_results = []
@@ -685,7 +695,7 @@ layout: two-cols
   <h1>Feature Importance</h1>
 </div>
 
-##### With and Without Duration feature
+###### Logistic Regression
 
 ```python 
 a = 0.0001
@@ -694,17 +704,23 @@ best_model_log_reg.fit(X_train_drop, y_train)
 y_pred = best_model_log_reg.predict_proba(X_test_drop)[:,1]
 
 importances = abs(best_model_log_reg.coef_[0])
-top_three = np.argpartition(importances, -3)[-3:]
-print("top_three", top_three)
+top_10 = np.argpartition(importances, -10)[-10:]
+print("top_10", top_10)
 plt.bar([x for x in range(len(importances))], importances)
 plt.show()
-print([v for i, v in enumerate(X_train_drop.columns) if i in top_three])
+important_features = [(t, importances[t], X_train_drop.columns[t]) for t in top_10]
+print(important_features)
+sorted_by_second = sorted(important_features, key=lambda tup: tup[1], reverse=True)
+for s in sorted_by_second:
+    print(s[2])
 ```
 ```
-Top 3 features: 
-  - emp.var.rate
-  - cons.price.idx
-  - euribor3m
+Top 10 features:
+1. euribor3m         6. contact_cellular
+2. emp.var.rate      7. contact_telephone
+3. cons.price.idx    8. month_may
+4. campaign          9. previous
+5. age               10. cons.conf.idx
 ```
 
 ::right::
@@ -726,14 +742,47 @@ Top 3 features:
 </style>
 
 ---
+layout: two-cols
+
+---
 
 <div
   v-if="$slidev.nav.currentPage === 23"
   v-motion
   :initial="{ x: 80 }"
   :enter="{ x: 0 }">
-  <h1>Rekomendasi</h1>
+  <h1>Random Forest Classifier</h1>
 </div>
+
+```python 
+alpha = [10, 50, 100, 500, 1000, 2000]
+auc_results = []
+for a in alpha:
+    model_rand_forest = RandomForestClassifier(n_estimators=a, random_state=40, n_jobs=-1)
+    model_rand_forest.fit(X_train_drop, y_train)
+    y_pred = model_rand_forest.predict_proba(X_test_drop)[:,1]
+    auc = roc_auc_score(y_test, y_pred)
+    print(f"k = {a}, AUC = {auc}")
+    fpr, tpr, _ = roc_curve(y_test,  y_pred)
+    plt.plot(fpr, tpr , label="Random Forest, auc="+str(auc))
+    plt.legend(loc=4)
+    auc_results.append(roc_auc_score(y_test, y_pred))
+plt.show()
+best_alpha_index = np.argmax(auc_results)
+best_alpha = alpha[best_alpha_index]
+print(f"Best Alpha = {best_alpha}")
+print(f"Best AUC Score = {auc_results[best_alpha_index]}")
+```
+```
+Best n = 500
+Best AUC Score = 0.7453327657159075
+```
+
+::right::
+
+# \_\_\_
+
+<img v-click class="ml-4" border="rounded" src="/images/rand_forest.png" width="475">
 
 <style>
   h1 {
@@ -748,122 +797,96 @@ Top 3 features:
 </style>
 
 ---
-layout: image-right
-image: https://source.unsplash.com/collection/94734566/1920x1080
+layout: two-cols
 
 ---
+<div
+  v-if="$slidev.nav.currentPage === 24"
+  v-motion
+  :initial="{ x: 80 }"
+  :enter="{ x: 0 }">
+  <h1>Feature Importance</h1>
+</div>
 
-# Code
+###### Random Forest
 
-Use code snippets and get the highlighting directly![^1]
+```python 
+a = 500
+best_model_rand_forest = RandomForestClassifier(n_estimators=a, random_state=40, n_jobs=-1)
+best_model_rand_forest.fit(X_train_drop, y_train)
+y_pred = best_model_rand_forest.predict_proba(X_test_drop)[:,1]
 
-```ts {all|2|1-6|9|all}
-interface User {
-    id: number;
-    firstName: string;
-    lastName: string;
-    role: string;
-}
-
-function updateUser(id: number, update: User) {
-    const user = getUser(id);
-    const newUser = { ...user, ...update };
-    saveUser(id, newUser);
-}
+importances = best_model_rand_forest.feature_importances_
+top_10 = np.argpartition(importances, -10)[-10:]
+print("top_10_index", top_10)
+plt.bar([x for x in range(len(importances))], importances)
+plt.show()
+important_features = [(t, importances[t], X_train_drop.columns[t]) for t in top_10]
+print(important_features)
+sorted_by_second = sorted(important_features, key=lambda tup: tup[1], reverse=True)
+for s in sorted_by_second:
+    print(s[2])
+```
+```
+Top 10 features:
+1. euribor3m      6. cons.price.idx
+2. age            7. emp.var.rate
+3. nr.employed    8. pdays
+4. campaign       9. job_admin.
+5. cons.conf.idx  10. education_university.degree
 ```
 
-<arrow v-click="3" x1="400" y1="420" x2="230" y2="330" color="#564" width="3" arrowSize="1" />
+::right::
 
-[^1]: [Learn More](https://sli.dev/guide/syntax.html#line-highlighting)
+# \_\_\_
+
+<img v-click class="ml-4" border="rounded" src="/images/rand_forest_features.png" width="475">
 
 <style>
-.footnotes-sep {
-  @apply mt-20 opacity-10;
-}
-.footnotes {
-  @apply text-sm opacity-75;
-}
-.footnote-backref {
-  display: none;
-}
+  h1 {
+    background-color: #2B90B6;
+    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+    background-size: 100%;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent; 
+    -moz-text-fill-color: transparent;
+  }
 </style>
 
+
 ---
 
-# Components
-
-<div grid="~ cols-2 gap-4">
-<div>
-
-You can use Vue components directly inside your slides.
-
-We have provided a few built-in components like `<Tweet/>` and `<Youtube/>` that you can use directly. And adding your custom components is also super easy.
-
-```html
-<Counter :count="10" />
-```
-
-<!-- ./components/Counter.vue -->
-<Counter :count="10" m="t-4" />
-
-Check out [the guides](https://sli.dev/builtin/components.html) for more.
-
-</div>
-<div>
-
-```html
-<Tweet id="1390115482657726468" />
-```
-
-<Tweet id="1390115482657726468" scale="0.65" />
-
-</div>
+<div
+  v-if="$slidev.nav.currentPage === 25"
+  v-motion
+  :initial="{ x: 80 }"
+  :enter="{ x: 0 }">
+  <h1>Rekomendasi</h1>
 </div>
 
----
+- Nilai AUC pada Logistic Regression lebih besar dari pada Random Forest Classification, yaitu 0.7618
+- Bisa dilakukan pemodelan dengan algoritma yang lain seperti SVM atau XGBoost untuk meningkatkan nilai AUC
+- Feature Importance menunjukkan bahwa variable `euribor3m` adalah yang paling signifikan dalam prediksi data ini
+- Selain itu variable social/economy `emp.var.rate, cons.price.idx, cons.conf.idx, nr.employed` juga termasuk yang memberikan efek signifikan
+- Variable numeric `age` dan `campaign` termasuk dalam top 5. Dapat dilakukan campaign dengan target umur tertentu untuk telemarketing selanjutnya
 
-## class: px-20
-
-# Themes
-
-Slidev comes with powerful theming support. Themes can provide styles, layouts, components, or even configurations for tools. Switching between themes by just **one edit** in your frontmatter:
-
-<div grid="~ cols-2 gap-2" m="-t-2">
-
-```yaml
----
-theme: default
----
-```
-
-```yaml
----
-theme: seriph
----
-```
-
-<img border="rounded" src="https://github.com/slidevjs/themes/blob/main/screenshots/theme-default/01.png?raw=true">
-
-<img border="rounded" src="https://github.com/slidevjs/themes/blob/main/screenshots/theme-seriph/01.png?raw=true">
-
-</div>
-
-Read more about [How to use a theme](https://sli.dev/themes/use.html) and
-check out the [Awesome Themes Gallery](https://sli.dev/themes/gallery.html).
+<style>
+  h1 {
+    background-color: #2B90B6;
+    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+    background-size: 100%;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent; 
+    -moz-text-fill-color: transparent;
+  }
+</style>
 
 ---
 preload: false
 
 ---
-
-# Animations
-
-Animations are powered by [@vueuse/motion](https://motion.vueuse.org/).
-
-```html
-<div v-motion :initial="{ x: -80 }" :enter="{ x: 0 }">Slidev</div>
-```
-
 <div class="w-60 relative mt-6">
   <div class="relative w-40 h-40">
     <img
@@ -893,8 +916,8 @@ Animations are powered by [@vueuse/motion](https://motion.vueuse.org/).
     class="text-5xl absolute top-14 left-40 text-[#2B90B6] -z-1"
     v-motion
     :initial="{ x: -80, opacity: 0}"
-    :enter="{ x: 0, opacity: 1, transition: { delay: 2000, duration: 1000 } }">
-    Slidev
+    :enter="{ x: 0, opacity: 1, transition: { delay: 1000, duration: 500 } }">
+    Terima Kasih
   </div>
 </div>
 
@@ -909,80 +932,7 @@ const final = {
     type: 'spring',
     damping: 10,
     stiffness: 20,
-    mass: 2
+    mass: 1
   }
 }
 </script>
-
-<div
-  v-motion
-  :initial="{ x:35, y: 40, opacity: 0}"
-  :enter="{ y: 0, opacity: 1, transition: { delay: 3500 } }">
-
-[Learn More](https://sli.dev/guide/animations.html#motion)
-
-</div>
-
----
-
-# LaTeX
-
-LaTeX is supported out-of-box powered by [KaTeX](https://katex.org/).
-
-<br>
-
-Inline $\sqrt{3x-1}+(1+x)^2$
-
-Block
-
-$$
-\begin{array}{c}
-
-\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} &
-= \frac{4\pi}{c}\vec{\mathbf{j}}    \nabla \cdot \vec{\mathbf{E}} & = 4 \pi \rho \\
-
-\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} & = \vec{\mathbf{0}} \\
-
-\nabla \cdot \vec{\mathbf{B}} & = 0
-
-\end{array}
-$$
-
-<br>
-
-[Learn more](https://sli.dev/guide/syntax#latex)
-
----
-
-# Diagrams
-
-You can create diagrams / graphs from textual descriptions, directly in your Markdown.
-
-<div class="grid grid-cols-2 gap-10 pt-4 -mb-6">
-
-```mermaid {scale: 0.9}
-sequenceDiagram
-    Alice->John: Hello John, how are you?
-    Note over Alice,John: A typical interaction
-```
-
-```mermaid {theme: 'neutral', scale: 0.8}
-graph TD
-B[Text] --> C{Decision}
-C -->|One| D[Result 1]
-C -->|Two| E[Result 2]
-```
-
-</div>
-
-[Learn More](https://sli.dev/guide/syntax.html#diagrams)
-
----
-layout: center
-class: text-center
-
----
-
-# Learn More
-
-[Documentations](https://sli.dev) · [GitHub](https://github.com/slidevjs/slidev) · [Showcases](https://sli.dev/showcases.html)
