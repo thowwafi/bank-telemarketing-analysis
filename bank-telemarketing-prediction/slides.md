@@ -57,11 +57,15 @@ The last comment block of each slide will be treated as slide notes. It will be 
 <ul>
     <li>Berasal dari sebuah paper berjudul "A data-driven approach to predict the success of bank telemarketing"</li>
     <li>Penelitian dilakukan di Portugal dan dipublish pada tahun 2014</li>
+    <li>
+      Memiliki 20 <em>Features:</em>
+      <ul>
+          <li>10 <em>Numerics</em></li>
+          <li>10 <em>Categorical</em></li>
+      </ul>
+    </li>
 </ul>
 
-<br>
-<br>
-<br>
 <br>
 <br>
 
@@ -114,8 +118,8 @@ h1 {
 | Marital 🔠 <small>divorced, married, single</small>                 | Day of Week 🔠 <small>Mon ... Fri</small>     |
 | Education 🔠 <small>8 values</small>                                | Duration 🔢💡                                 |
 | Default 🔠 <small>has credit in default? (no, yes, unknown)</small> |                                               |
-| Housing Loan 🔠 <small>no, yes, unknown</small>                          |                                               |
-| Personal Loan 🔠 <small>no, yes, unknown</small>                             |                                               |
+| Housing Loan 🔠 <small>no, yes, unknown</small>                     |                                               |
+| Personal Loan 🔠 <small>no, yes, unknown</small>                    |                                               |
 
 ```
 💡 Important note: this attribute highly affects the output target (e.g., if duration=0 then y='no').
@@ -187,8 +191,8 @@ layout: two-cols
   <h1>Target</h1>
 </div>
 
-- Subscribe to term deposit?
-- y = (yes/no)
+-   Subscribe to term deposit?
+-   y = (yes/no)
 
 ::right::
 
@@ -215,6 +219,7 @@ layout: two-cols
 layout: two-cols
 
 ---
+
 <div
   v-if="$slidev.nav.currentPage === 6"
   v-motion
@@ -226,18 +231,13 @@ layout: two-cols
 ```python {all|1-4|1-9|all}
 def plot_graphs(col, df):
     # Set Figsize
-    if len(df[col].value_counts()) > 5:
-        fig, ax = plt.subplots(2, sharex=True, figsize=(10, 10))
-    else:
-        fig, ax = plt.subplots(1, 2, figsize=(7, 5))
-        fig.tight_layout()
+    fig, ax = plt.subplots(2, sharex=True, figsize=(10, 10))
 
     # Plot Histogram
     sns.countplot(data=df, x=col, ax=ax[0], color='C0')
     for i, p in enumerate(ax[0].patches):
         ax[0].annotate(f'{p.get_height()}', (p.get_x()+0.1, p.get_height()+5))
     ax[0].set_title(f"{col.title()} Histogram")
-    # ax[0].set_xticklabels(ax[0].get_xticklabels(), rotation=40, ha="right")
 
     # Plot y distribution on feature
     Y = df[col]
@@ -251,8 +251,6 @@ def plot_graphs(col, df):
     ax[1].set_xticklabels(ax[1].get_xticklabels(), rotation=10, ha="right")
     ax[1].set_title(f"y distribution on {col.title()}")
     plt.show()
-    # fig.savefig(f'bank-telemarketing-prediction/images/hist_{col}.png')
-    # plt.close(fig)
 ```
 
 ::right::
@@ -260,6 +258,7 @@ def plot_graphs(col, df):
 #### Feature Type: Categorical
 
 ###### 1. Job
+
 <img border="rounded" src="/images/hist_job.png" width="600">
 <!-- <img style="margin-left:40px;" border="rounded" src="/images/y_vs_job.png" width="350"> -->
 
@@ -279,71 +278,88 @@ def plot_graphs(col, df):
 layout: two-cols
 
 ---
+
 #### Feature Type: Categorical
 
 ###### 2. Marital Status
+
 <img border="rounded" src="/images/hist_marital.png" width="400">
 
-
 ::right::
-#### ___
+
+#### \_\_\_
+
 ###### 3. Education
+
 <img border="rounded" src="/images/hist_education.png" width="400">
 
 ---
 layout: two-cols
 
 ---
+
 #### Feature Type: Categorical
 
 ###### 4. Default
+
 <img style="margin-left:40px;" border="rounded" src="/images/hist_default.png" width="400">
 
-
 ::right::
-#### ___
+
+#### \_\_\_
+
 ###### 5. housing Loan
+
 <img style="margin-left:40px;" border="rounded" src="/images/hist_housing.png" width="400">
 
 ---
 layout: two-cols
 
 ---
+
 #### Feature Type: Categorical
 
 ###### 6. Personal Loan
+
 <img style="margin-left:40px;" border="rounded" src="/images/hist_loan.png" width="400">
 
-
 ::right::
-#### ___
+
+#### \_\_\_
+
 ###### 7. Contact
+
 <img style="margin-left:40px;" border="rounded" src="/images/hist_contact.png" width="400">
 
 ---
 layout: two-cols
 
 ---
+
 #### Feature Type: Categorical
 
 ###### 8. Month
+
 <img style="margin-left:40px;" border="rounded" src="/images/hist_month.png" width="400">
 
-
 ::right::
-#### ___
+
+#### \_\_\_
+
 ###### 9. Day of Week
+
 <img style="margin-left:40px;" border="rounded" src="/images/hist_day_of_week.png" width="400">
 
 ---
 layout: two-cols
 
 ---
+
 #### Feature Type: Categorical
 
 ###### 10. P-outcome
-<img style="margin-left:40px;" border="rounded" src="/images/hist_poutcome.png" width="400">
 
+<img style="margin-left:40px;" border="rounded" src="/images/hist_poutcome.png" width="400">
 
 ::right::
 
@@ -351,6 +367,7 @@ layout: two-cols
 layout: two-cols
 
 ---
+
 <div
   v-if="$slidev.nav.currentPage === 12"
   v-motion
@@ -365,8 +382,6 @@ def plot_numeric_graphs(col, df):
     sns.boxplot(x='y', y=col, data=df, ax=ax[0])
     sns.histplot(df[col], kde=True)
     plt.show()
-    # fig.savefig(f'bank-telemarketing-prediction/images/hist_{col.replace(".", "_")}.png')
-    # plt.close(fig)
 ```
 
 ::right::
@@ -374,6 +389,7 @@ def plot_numeric_graphs(col, df):
 #### Feature Type: Numeric
 
 ###### 1. Age
+
 <img border="rounded" src="/images/hist_age.png" width="325">
 
 <style>
@@ -392,80 +408,92 @@ def plot_numeric_graphs(col, df):
 layout: two-cols
 
 ---
+
 #### Feature Type: Numeric
 
 ###### 2. Duration
+
 <img border="rounded" src="/images/hist_duration.png" width="325">
 
 ::right::
 
-#### ___
+#### \_\_\_
 
 ###### 3. Campaign
+
 <img border="rounded" src="/images/hist_campaign.png" width="325">
 
 ---
 layout: two-cols
 
 ---
+
 #### Feature Type: Numeric
 
 ###### 4. P-days
+
 <img border="rounded" src="/images/hist_pdays.png" width="325">
 
 ::right::
 
-#### ___
+#### \_\_\_
 
 ###### 5. Previous
+
 <img border="rounded" src="/images/hist_previous.png" width="325">
 
 ---
 layout: two-cols
 
 ---
+
 #### Feature Type: Numeric
 
 ###### 6. emp.var.rate
+
 <img border="rounded" src="/images/hist_emp_var_rate.png" width="325">
 
 ::right::
 
-#### ___
+#### \_\_\_
 
 ###### 7. nr.employed
-<img border="rounded" src="/images/hist_nr_employed.png" width="325">
 
+<img border="rounded" src="/images/hist_nr_employed.png" width="325">
 
 ---
 layout: two-cols
 
 ---
+
 #### Feature Type: Numeric
 
 ###### 8. cons.price.idx
+
 <img border="rounded" src="/images/hist_cons_price_idx.png" width="325">
 
 ::right::
 
-#### ___
+#### \_\_\_
 
 ###### 9. cons.conf.idx
+
 <img border="rounded" src="/images/hist_cons_price_idx.png" width="325">
 
 ---
 layout: two-cols
 
 ---
+
 #### Feature Type: Numeric
 
 ###### 10. euribor3m
+
 <img border="rounded" src="/images/hist_euribor3m.png" width="325">
 
 ::right::
 
-#### ___
-
+#### \_\_\_
 
 ---
 
@@ -478,6 +506,234 @@ layout: two-cols
 </div>
 
 <img class="ml-44" border="rounded" src="/images/heatmap_corr.png" width="475">
+
+<style>
+  h1 {
+    background-color: #2B90B6;
+    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+    background-size: 100%;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent; 
+    -moz-text-fill-color: transparent;
+  }
+</style>
+
+---
+
+<div
+  v-if="$slidev.nav.currentPage === 19"
+  v-motion
+  :initial="{ x: 80 }"
+  :enter="{ x: 0 }">
+  <h1>Preprocessing</h1>
+</div>
+
+1. Encode categorical data to dummy
+
+```python
+categorical = ['job', 'marital', 'education', 'default', 'housing', 'loan', 'contact', 'month', 'day_of_week', 'poutcome']
+df_dummy = pd.get_dummies(df, columns=categorical)
+df_dummy['y'] = df_dummy.y.map({'yes': 1, 'no': 0})
+```
+
+2. Split train and test data
+
+```python
+X = df_dummy.drop(columns=['y'])
+y = df_dummy.y.values
+X_train, X_test, y_train, y_test  = train_test_split(X, y, test_size=0.33, random_state=42)
+```
+
+<style>
+  h1 {
+    background-color: #2B90B6;
+    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+    background-size: 100%;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent; 
+    -moz-text-fill-color: transparent;
+  }
+</style>
+
+---
+layout: two-cols
+
+---
+
+<div
+  v-if="$slidev.nav.currentPage === 20"
+  v-motion
+  :initial="{ x: 80 }"
+  :enter="{ x: 0 }">
+  <h1>Logistic Regression</h1>
+</div>
+
+##### With and Without Duration feature
+
+```python {1-6|8-9|11-16|18-22|all}
+model = LogisticRegression(class_weight='balanced', max_iter=10000)
+model.fit(X_train, y_train)
+y_pred = model.predict_proba(X_test)[:,1]
+auc = roc_auc_score(y_test, y_pred)
+print("AUC score with duration column: ", auc)
+fpr, tpr, _ = roc_curve(y_test,  y_pred)
+
+X_train_drop = X_train.drop(columns=["duration"])
+X_test_drop = X_test.drop(columns=["duration"])
+
+model = LogisticRegression(class_weight='balanced', max_iter=10000)
+model.fit(X_train_drop, y_train)
+y_pred_without_dur = model.predict_proba(X_test_drop)[:,1]
+auc2 = roc_auc_score(y_test, y_pred_without_dur)
+print("AUC score without duration column: ", auc2)
+fpr2, tpr2, _ = roc_curve(y_test,  y_pred_without_dur)
+
+plt.figure(figsize=(7,7))
+plt.plot(fpr, tpr , label="Logistic, auc="+str(auc))
+plt.plot(fpr2, tpr2 , label="Logistic Without Duration, auc="+str(auc2))
+plt.legend(loc=4)
+plt.show()
+```
+
+::right::
+
+# \_\_\_
+
+<img v-click class="ml-4" border="rounded" src="/images/roc_logistic.png" width="475">
+
+<style>
+  h1 {
+    background-color: #2B90B6;
+    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+    background-size: 100%;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent; 
+    -moz-text-fill-color: transparent;
+  }
+</style>
+
+---
+layout: two-cols
+
+---
+
+<div
+  v-if="$slidev.nav.currentPage === 21"
+  v-motion
+  :initial="{ x: 80 }"
+  :enter="{ x: 0 }">
+  <h1>Tuning Parameter</h1>
+</div>
+
+##### With and Without Duration feature
+
+```python 
+alpha = [10 ** x for x in range(-5, 4)]
+auc_results = []
+for a in alpha:
+    model_log_reg = LogisticRegression(penalty='l2', C=a, class_weight='balanced', max_iter=10000)
+    model_log_reg.fit(X_train_drop, y_train)
+    y_pred = model_log_reg.predict_proba(X_test_drop)[:,1]
+    auc = roc_auc_score(y_test, y_pred)
+    print(f"k = {a}, AUC = {auc}")
+    fpr, tpr, _ = roc_curve(y_test,  y_pred)
+    plt.plot(fpr, tpr , label="Logistic, auc="+str(auc))
+    plt.legend(loc=4)
+    auc_results.append(roc_auc_score(y_test, y_pred))
+plt.show()
+best_alpha_index = np.argmax(auc_results)
+best_alpha = alpha[best_alpha_index]
+print(f"Best Alpha = {best_alpha}")
+print(f"Best AUC Score = {auc_results[best_alpha_index]}")
+```
+```
+Best Alpha = 0.0001
+Best AUC Score = 0.7618334042855115
+```
+
+::right::
+
+# \_\_\_
+
+<img v-click class="ml-4" border="rounded" src="/images/multi_auc.png" width="475">
+
+<style>
+  h1 {
+    background-color: #2B90B6;
+    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+    background-size: 100%;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent; 
+    -moz-text-fill-color: transparent;
+  }
+</style>
+
+---
+layout: two-cols
+
+---
+
+<div
+  v-if="$slidev.nav.currentPage === 22"
+  v-motion
+  :initial="{ x: 80 }"
+  :enter="{ x: 0 }">
+  <h1>Feature Importance</h1>
+</div>
+
+##### With and Without Duration feature
+
+```python 
+a = 0.0001
+best_model_log_reg = LogisticRegression(penalty='l2', C=a, class_weight='balanced', max_iter=10000)
+best_model_log_reg.fit(X_train_drop, y_train)
+y_pred = best_model_log_reg.predict_proba(X_test_drop)[:,1]
+
+importances = abs(best_model_log_reg.coef_[0])
+top_three = np.argpartition(importances, -3)[-3:]
+print("top_three", top_three)
+plt.bar([x for x in range(len(importances))], importances)
+plt.show()
+print([v for i, v in enumerate(X_train_drop.columns) if i in top_three])
+```
+```
+Top 3 features: 
+  - emp.var.rate
+  - cons.price.idx
+  - euribor3m
+```
+
+::right::
+
+# \_\_\_
+
+<img v-click class="ml-4" border="rounded" src="/images/importances.png" width="475">
+
+<style>
+  h1 {
+    background-color: #2B90B6;
+    background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+    background-size: 100%;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent; 
+    -moz-text-fill-color: transparent;
+  }
+</style>
+
+---
+
+<div
+  v-if="$slidev.nav.currentPage === 23"
+  v-motion
+  :initial="{ x: 80 }"
+  :enter="{ x: 0 }">
+  <h1>Rekomendasi</h1>
+</div>
 
 <style>
   h1 {
@@ -596,8 +852,9 @@ Read more about [How to use a theme](https://sli.dev/themes/use.html) and
 check out the [Awesome Themes Gallery](https://sli.dev/themes/gallery.html).
 
 ---
+preload: false
 
-## preload: false
+---
 
 # Animations
 
@@ -721,7 +978,6 @@ C -->|Two| E[Result 2]
 [Learn More](https://sli.dev/guide/syntax.html#diagrams)
 
 ---
-
 layout: center
 class: text-center
 
