@@ -54,7 +54,7 @@ The last comment block of each slide will be treated as slide notes. It will be 
 layout: full
 
 ---
-<img border="rounded" src="mockup-image.png">
+<img border="rounded" src="/images/mockup-image.png">
 ---
 
 # Dashboard
