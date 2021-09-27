@@ -59,7 +59,7 @@ layout: full
 
 # Dashboard
 
-- Dashboard bisa ditampilkan berdasarkan waktu (Daily, Weekly, Monthly, Yearly)
+- Dashboard bisa ditampilkan berdasarkan range tanggal (from, to)
 
 
 ---
