@@ -55,135 +55,82 @@ layout: full
 
 ---
 <img border="rounded" src="/images/mockup-image.png">
+
 ---
 
 # Dashboard
 
-- Dashboard bisa ditampilkan berdasarkan range tanggal (from, to)
-
-
----
-layout: image-right
-image: https://source.unsplash.com/collection/94734566/1920x1080
+- Dashboard bisa menampilkan data berdasarkan range tanggal (from, to)
+- Menampilkan jumlah transaksi pendanaan/pinjaman dan total nilainya
+<img border="rounded" src="/images/pendanaan.png">
 
 ---
 
-# Code
+# Performance
 
-Use code snippets and get the highlighting directly![^1]
+- Menampilkann nilai akumulasi Return of Investment oleh semua transaksi
+<img border="rounded" src="/images/roi.png">
 
-```ts {all|2|1-6|9|all}
-interface User {
-  id: number
-  firstName: string
-  lastName: string
-  role: string
-}
-
-function updateUser(id: number, update: User) {
-  const user = getUser(id)
-  const newUser = {...user, ...update}  
-  saveUser(id, newUser)
-}
-```
-
-<arrow v-click="3" x1="400" y1="420" x2="230" y2="330" color="#564" width="3" arrowSize="1" />
-
-[^1]: [Learn More](https://sli.dev/guide/syntax.html#line-highlighting)
-
-<style>
-.footnotes-sep {
-  @apply mt-20 opacity-10;
-}
-.footnotes {
-  @apply text-sm opacity-75;
-}
-.footnote-backref {
-  display: none;
-}
-</style>
+- Menampilkan data performa pinjaman
+<img border="rounded" src="/images/telat-bayar.png">
 
 ---
 
-# Components
+# Overall Transactions
 
-<div grid="~ cols-2 gap-4">
-<div>
-
-You can use Vue components directly inside your slides.
-
-We have provided a few built-in components like `<Tweet/>` and `<Youtube/>` that you can use directly. And adding your custom components is also super easy.
-
-```html
-<Counter :count="10" />
-```
-
-<!-- ./components/Counter.vue -->
-<Counter :count="10" m="t-4" />
-
-Check out [the guides](https://sli.dev/builtin/components.html) for more.
-
-</div>
-<div>
-
-```html
-<Tweet id="1390115482657726468" />
-```
-
-<Tweet id="1390115482657726468" scale="0.65" />
-
-</div>
-</div>
-
+- Bisa ditampilkan berdasarkan product atau user type
+- X-axis adalah bulan dan tahun
+- Y-axis adalah Jumlah uang dalam rupiah
+<img border="rounded" src="/images/overall.png">
 
 ---
-class: px-20
+
+# Users Section
+
+- Menampilkan jumlah user:
+  1. Registered (terdaftar)
+  2. Registered and Active (sudah melakukan pendanaan/pinjaman minimal 1 kali)
+  3. New User data user baru harian
+
+<img border="rounded" src="/images/users.png" width="500">
+
 ---
 
-# Themes
+# Products
 
-Slidev comes with powerful theming support. Themes can provide styles, layouts, components, or even configurations for tools. Switching between themes by just **one edit** in your frontmatter:
+- Menampilkan performa pada tiap product
+<img border="rounded" src="/images/products.png" width="200">
+- Jumlah Pendana dan Peminjam berdasarkan individuals/institutional
+- Total transaksi dan ROI
+- Listing success rate, berapa user yang ditolak untuk pengajuan pinjaman
 
-<div grid="~ cols-2 gap-2" m="-t-2">
-
-```yaml
 ---
-theme: default
+
+# Daftar Pinjaman Aktif
+
+- Live Data harian, progress pinjaman yang sedang berlangsung
+- Agar manajemen bisa memantau UKM mana yang potential untuk dilakukan campaign
+<img border="rounded" src="/images/list-pinjaman.png" width="400">
+
 ---
-```
 
-```yaml
----
-theme: seriph
----
-```
+# Idea
 
-<img border="rounded" src="https://github.com/slidevjs/themes/blob/main/screenshots/theme-default/01.png?raw=true">
+1. Dengan adanya dashboard ROI, kita bisa melihat berapa keuntungan yang didapat dengan membandingkan antara peminjam individu/institutional
+    Misal: Pinjaman yang diberikan kepada UKM mendapatkan ROI lebih besar 50% dibandingkan ke individu.
+    Campaign: Berikan promo atau tawaran menarik pada UKM.
 
-<img border="rounded" src="https://github.com/slidevjs/themes/blob/main/screenshots/theme-seriph/01.png?raw=true">
+2. Dari data 3 produk yang ada, bisa dilihat berapa presentasi telat/gagal bayar dan berada di Grade resiko tingkat apa.
+    Pihak manajemen bisa menggunakan data ini untuk evaluasi seleksi user/UKM yang mengajukan pinjaman
+    Eksperimen berikan pendanaan resiko tinggi pada beberapa borrower, dan hitung tingkat berhasil bayar
 
-</div>
-
-Read more about [How to use a theme](https://sli.dev/themes/use.html) and
-check out the [Awesome Themes Gallery](https://sli.dev/themes/gallery.html).
+3. Pada dashboard user section, bisa ditinjau tingkat kenaikan user harian/mingguan sebelum dan sesudah dilakukan campaign.
+    Apakah lebih banyak user baru yang mendaftar sebagai Lender atau Borrower.
 
 ---
 preload: false
+
 ---
-
-# Animations
-
-Animations are powered by [@vueuse/motion](https://motion.vueuse.org/).
-
-```html
-<div
-  v-motion
-  :initial="{ x: -80 }"
-  :enter="{ x: 0 }">
-  Slidev
-</div>
-```
-
 <div class="w-60 relative mt-6">
   <div class="relative w-40 h-40">
     <img
@@ -213,8 +160,8 @@ Animations are powered by [@vueuse/motion](https://motion.vueuse.org/).
     class="text-5xl absolute top-14 left-40 text-[#2B90B6] -z-1"
     v-motion
     :initial="{ x: -80, opacity: 0}"
-    :enter="{ x: 0, opacity: 1, transition: { delay: 2000, duration: 1000 } }">
-    Slidev
+    :enter="{ x: 0, opacity: 1, transition: { delay: 1000, duration: 500 } }">
+    Terima Kasih
   </div>
 </div>
 
@@ -229,79 +176,7 @@ const final = {
     type: 'spring',
     damping: 10,
     stiffness: 20,
-    mass: 2
+    mass: 1
   }
 }
 </script>
-
-<div
-  v-motion
-  :initial="{ x:35, y: 40, opacity: 0}"
-  :enter="{ y: 0, opacity: 1, transition: { delay: 3500 } }">
-
-[Learn More](https://sli.dev/guide/animations.html#motion)
-
-</div>
-
----
-
-# LaTeX
-
-LaTeX is supported out-of-box powered by [KaTeX](https://katex.org/).
-
-<br>
-
-Inline $\sqrt{3x-1}+(1+x)^2$
-
-Block
-$$
-\begin{array}{c}
-
-\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} &
-= \frac{4\pi}{c}\vec{\mathbf{j}}    \nabla \cdot \vec{\mathbf{E}} & = 4 \pi \rho \\
-
-\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} & = \vec{\mathbf{0}} \\
-
-\nabla \cdot \vec{\mathbf{B}} & = 0
-
-\end{array}
-$$
-
-<br>
-
-[Learn more](https://sli.dev/guide/syntax#latex)
-
----
-
-# Diagrams
-
-You can create diagrams / graphs from textual descriptions, directly in your Markdown.
-
-<div class="grid grid-cols-2 gap-10 pt-4 -mb-6">
-
-```mermaid {scale: 0.9}
-sequenceDiagram
-    Alice->John: Hello John, how are you?
-    Note over Alice,John: A typical interaction
-```
-
-```mermaid {theme: 'neutral', scale: 0.8}
-graph TD
-B[Text] --> C{Decision}
-C -->|One| D[Result 1]
-C -->|Two| E[Result 2]
-```
-
-</div>
-
-[Learn More](https://sli.dev/guide/syntax.html#diagrams)
-
-
----
-layout: center
-class: text-center
----
-
-# Learn More
-
-[Documentations](https://sli.dev) · [GitHub](https://github.com/slidevjs/slidev) · [Showcases](https://sli.dev/showcases.html)
